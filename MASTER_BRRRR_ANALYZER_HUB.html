@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 BRRRR Analyzer Hub - Property Deal Analysis Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c1810 0%, #4a1f1f 50%, #2c1810 100%);
+            color: #e6e6fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="8" fill="%23ffd700" opacity="0.1">🏠💰📊</text></svg>') repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header h1 {
+            font-size: 3.5rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-weight: bold;
+        }
+        
+        .header .subtitle {
+            font-size: 1.4rem;
+            color: #e6e6fa;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            color: #ffd700;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #e6e6fa;
+            margin-top: 5px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .input-section {
+            margin-bottom: 60px;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .input-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .input-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .input-card h2 {
+            color: #ffd700;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .input-card .icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #e6e6fa;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .analyze-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4169e1, #6495ed);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
+        }
+        
+        .series-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .series-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+        
+        .series-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .series-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .series-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .series-icon {
+            font-size: 2.5rem;
+            margin-right: 20px;
+        }
+        
+        .series-title {
+            font-size: 1.5rem;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .series-subtitle {
+            color: #e6e6fa;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+        
+        .series-description {
+            color: #e6e6fa;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .series-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #e6e6fa;
+        }
+        
+        .series-versions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .version-badge {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid #ffd700;
+        }
+        
+        .series-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #4169e1, #6495ed);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
+        }
+        
+        .action-btn.secondary {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #2c1810;
+        }
+        
+        .action-btn.secondary:hover {
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+        
+        .footer h3 {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .footer p {
+            color: #e6e6fa;
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stats {
+                gap: 20px;
+            }
+            
+            .stat-item {
+                padding: 15px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>🏠 BRRRR Analyzer Hub</h1>
+            <p class="subtitle">Professional Property Deal Analysis Platform for BRRRR Investors</p>
+            <p class="subtitle">Analyze properties from MLS data or YouTube videos to determine if they're good deals for BRRRR strategy</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalAnalyses">0</span>
+                    <span class="stat-label">Analyses Completed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalProperties">0</span>
+                    <span class="stat-label">Properties Analyzed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalVideos">0</span>
+                    <span class="stat-label">Video Analyses</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalDeals">0</span>
+                    <span class="stat-label">Good Deals Found</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Dual Input Section -->
+        <div class="input-section">
+            <h2 class="section-title">🎯 Property Analysis Input</h2>
+            <div class="input-grid">
+                <!-- MLS/Property Info Input -->
+                <div class="input-card">
+                    <div class="icon">🏠</div>
+                    <h2>Direct Property Analysis</h2>
+                    <p style="text-align: center; margin-bottom: 20px; color: #e6e6fa;">Enter property details directly for BRRRR analysis</p>
+                    
+                    <form id="propertyForm">
+                        <div class="form-group">
+                            <label for="mlsNumber">MLS Number (Optional)</label>
+                            <input type="text" id="mlsNumber" placeholder="Enter MLS number if available">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="propertyAddress">Property Address</label>
+                            <input type="text" id="propertyAddress" placeholder="Enter full property address" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="purchasePrice">Purchase Price</label>
+                            <input type="number" id="purchasePrice" placeholder="Enter purchase price" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="afterRepairValue">After Repair Value (ARV)</label>
+                            <input type="number" id="afterRepairValue" placeholder="Enter estimated ARV" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="repairCosts">Estimated Repair Costs</label>
+                            <input type="number" id="repairCosts" placeholder="Enter repair costs" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="rentalIncome">Expected Monthly Rental Income</label>
+                            <input type="number" id="rentalIncome" placeholder="Enter monthly rent" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="propertyType">Property Type</label>
+                            <select id="propertyType" required>
+                                <option value="">Select property type</option>
+                                <option value="single-family">Single Family</option>
+                                <option value="duplex">Duplex</option>
+                                <option value="triplex">Triplex</option>
+                                <option value="quadplex">Quadplex</option>
+                                <option value="townhouse">Townhouse</option>
+                                <option value="condo">Condo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="propertyNotes">Additional Notes</label>
+                            <textarea id="propertyNotes" rows="3" placeholder="Any additional property details or notes"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="analyze-btn">🔍 Analyze Property Deal</button>
+                    </form>
+                </div>
+                
+                <!-- YouTube URL Input -->
+                <div class="input-card">
+                    <div class="icon">📺</div>
+                    <h2>YouTube Video Analysis</h2>
+                    <p style="text-align: center; margin-bottom: 20px; color: #e6e6fa;">Analyze properties from YouTube videos and create educational content</p>
+                    
+                    <form id="youtubeForm">
+                        <div class="form-group">
+                            <label for="videoTitle">Video Title</label>
+                            <input type="text" id="videoTitle" placeholder="Enter video title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="youtubeUrl">YouTube URL</label>
+                            <input type="url" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=..." required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="analysisType">Analysis Type</label>
+                            <select id="analysisType" required>
+                                <option value="">Select analysis type</option>
+                                <option value="brrrr-analysis">BRRRR Strategy Analysis</option>
+                                <option value="deal-breakdown">Deal Breakdown</option>
+                                <option value="market-analysis">Market Analysis</option>
+                                <option value="comparison">Property Comparison</option>
+                                <option value="case-study">Case Study</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="videoNotes">Analysis Notes</label>
+                            <textarea id="videoNotes" rows="3" placeholder="Key points to analyze or specific aspects to focus on"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="analyze-btn">🎬 Create Analysis Video</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Analysis Series Section -->
+        <div class="series-section">
+            <h2 class="section-title">📊 BRRRR Analysis Series</h2>
+            <div class="series-grid">
+                <!-- BRRRR Deal Analysis Series -->
+                <div class="series-card">
+                    <div class="series-header">
+                        <div class="series-icon">💰</div>
+                        <div>
+                            <h3 class="series-title">BRRRR Deal Analysis</h3>
+                            <p class="series-subtitle">Complete Deal Evaluation</p>
+                        </div>
+                    </div>
+                    
+                    <p class="series-description">
+                        Comprehensive BRRRR deal analysis covering purchase price, ARV, repair costs, rental income, and refinancing potential. Learn how to evaluate if a property fits the BRRRR strategy.
+                    </p>
+                    
+                    <div class="series-meta">
+                        <span>📅 Created: July 27, 2025</span>
+                        <span>🎬 7 Video Versions</span>
+                    </div>
+                    
+                    <div class="series-versions">
+                        <span class="version-badge">15s</span>
+                        <span class="version-badge">25s</span>
+                        <span class="version-badge">50s</span>
+                        <span class="version-badge">75s</span>
+                        <span class="version-badge">90s</span>
+                        <span class="version-badge">100s</span>
+                        <span class="version-badge">120s</span>
+                    </div>
+                    
+                    <div class="series-actions">
+                        <a href="brrrr_deal_analysis_all_versions.html" class="action-btn">🎬 Watch All Versions</a>
+                        <a href="#" class="action-btn secondary" target="_blank">📊 Analysis Tools</a>
+                    </div>
+                </div>
+                
+                <!-- Property Valuation Series -->
+                <div class="series-card">
+                    <div class="series-header">
+                        <div class="series-icon">📈</div>
+                        <div>
+                            <h3 class="series-title">Property Valuation</h3>
+                            <p class="series-subtitle">ARV & Market Analysis</p>
+                        </div>
+                    </div>
+                    
+                    <p class="series-description">
+                        Master property valuation techniques for BRRRR investing. Learn how to accurately determine After Repair Value (ARV) and analyze market conditions for optimal investment decisions.
+                    </p>
+                    
+                    <div class="series-meta">
+                        <span>📅 Created: July 27, 2025</span>
+                        <span>🎬 7 Video Versions</span>
+                    </div>
+                    
+                    <div class="series-versions">
+                        <span class="version-badge">15s</span>
+                        <span class="version-badge">25s</span>
+                        <span class="version-badge">50s</span>
+                        <span class="version-badge">75s</span>
+                        <span class="version-badge">90s</span>
+                        <span class="version-badge">100s</span>
+                        <span class="version-badge">120s</span>
+                    </div>
+                    
+                    <div class="series-actions">
+                        <a href="property_valuation_all_versions.html" class="action-btn">🎬 Watch All Versions</a>
+                        <a href="#" class="action-btn secondary" target="_blank">📊 Valuation Tools</a>
+                    </div>
+                </div>
+                
+                <!-- Repair Cost Analysis Series -->
+                <div class="series-card">
+                    <div class="series-header">
+                        <div class="series-icon">🔧</div>
+                        <div>
+                            <h3 class="series-title">Repair Cost Analysis</h3>
+                            <p class="series-subtitle">Rehab Budget Planning</p>
+                        </div>
+                    </div>
+                    
+                    <p class="series-description">
+                        Expert guidance on estimating repair costs and creating rehab budgets for BRRRR properties. Learn how to accurately assess renovation needs and avoid cost overruns.
+                    </p>
+                    
+                    <div class="series-meta">
+                        <span>📅 Created: July 27, 2025</span>
+                        <span>🎬 7 Video Versions</span>
+                    </div>
+                    
+                    <div class="series-versions">
+                        <span class="version-badge">15s</span>
+                        <span class="version-badge">25s</span>
+                        <span class="version-badge">50s</span>
+                        <span class="version-badge">75s</span>
+                        <span class="version-badge">90s</span>
+                        <span class="version-badge">100s</span>
+                        <span class="version-badge">120s</span>
+                    </div>
+                    
+                    <div class="series-actions">
+                        <a href="repair_cost_analysis_all_versions.html" class="action-btn">🎬 Watch All Versions</a>
+                        <a href="#" class="action-btn secondary" target="_blank">🔧 Cost Calculator</a>
+                    </div>
+                </div>
+                
+                <!-- Rental Income Analysis Series -->
+                <div class="series-card">
+                    <div class="series-header">
+                        <div class="series-icon">🏠</div>
+                        <div>
+                            <h3 class="series-title">Rental Income Analysis</h3>
+                            <p class="series-subtitle">Cash Flow Optimization</p>
+                        </div>
+                    </div>
+                    
+                    <p class="series-description">
+                        Comprehensive rental income analysis for BRRRR properties. Learn how to maximize rental income, analyze market rents, and optimize cash flow for refinancing success.
+                    </p>
+                    
+                    <div class="series-meta">
+                        <span>📅 Created: July 27, 2025</span>
+                        <span>🎬 7 Video Versions</span>
+                    </div>
+                    
+                    <div class="series-versions">
+                        <span class="version-badge">15s</span>
+                        <span class="version-badge">25s</span>
+                        <span class="version-badge">50s</span>
+                        <span class="version-badge">75s</span>
+                        <span class="version-badge">90s</span>
+                        <span class="version-badge">100s</span>
+                        <span class="version-badge">120s</span>
+                    </div>
+                    
+                    <div class="series-actions">
+                        <a href="rental_income_analysis_all_versions.html" class="action-btn">🎬 Watch All Versions</a>
+                        <a href="#" class="action-btn secondary" target="_blank">💰 Cash Flow Calculator</a>
+                    </div>
+                </div>
+                
+                <!-- Refinancing Strategy Series -->
+                <div class="series-card">
+                    <div class="series-header">
+                        <div class="series-icon">🏦</div>
+                        <div>
+                            <h3 class="series-title">Refinancing Strategy</h3>
+                            <p class="series-subtitle">Capital Recycling Guide</p>
+                        </div>
+                    </div>
+                    
+                    <p class="series-description">
+                        Master the refinancing phase of BRRRR strategy. Learn how to successfully refinance properties to pull out capital and repeat the process for portfolio growth.
+                    </p>
+                    
+                    <div class="series-meta">
+                        <span>📅 Created: July 27, 2025</span>
+                        <span>🎬 7 Video Versions</span>
+                    </div>
+                    
+                    <div class="series-versions">
+                        <span class="version-badge">15s</span>
+                        <span class="version-badge">25s</span>
+                        <span class="version-badge">50s</span>
+                        <span class="version-badge">75s</span>
+                        <span class="version-badge">90s</span>
+                        <span class="version-badge">100s</span>
+                        <span class="version-badge">120s</span>
+                    </div>
+                    
+                    <div class="series-actions">
+                        <a href="refinancing_strategy_all_versions.html" class="action-btn">🎬 Watch All Versions</a>
+                        <a href="#" class="action-btn secondary" target="_blank">🏦 Refi Calculator</a>
+                    </div>
+                </div>
+                
+                <!-- Market Analysis Series -->
+                <div class="series-card">
+                    <div class="series-header">
+                        <div class="series-icon">📊</div>
+                        <div>
+                            <h3 class="series-title">Market Analysis</h3>
+                            <p class="series-subtitle">Location Intelligence</p>
+                        </div>
+                    </div>
+                    
+                    <p class="series-description">
+                        Advanced market analysis techniques for BRRRR investors. Learn how to evaluate neighborhoods, analyze market trends, and identify emerging opportunities for maximum returns.
+                    </p>
+                    
+                    <div class="series-meta">
+                        <span>📅 Created: July 27, 2025</span>
+                        <span>🎬 7 Video Versions</span>
+                    </div>
+                    
+                    <div class="series-versions">
+                        <span class="version-badge">15s</span>
+                        <span class="version-badge">25s</span>
+                        <span class="version-badge">50s</span>
+                        <span class="version-badge">75s</span>
+                        <span class="version-badge">90s</span>
+                        <span class="version-badge">100s</span>
+                        <span class="version-badge">120s</span>
+                    </div>
+                    
+                    <div class="series-actions">
+                        <a href="market_analysis_all_versions.html" class="action-btn">🎬 Watch All Versions</a>
+                        <a href="#" class="action-btn secondary" target="_blank">📊 Market Tools</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <h3>🏠 BRRRR Analyzer Hub</h3>
+        <p>Professional property deal analysis for BRRRR investors</p>
+        <p>Transform property data into actionable investment insights</p>
+    </div>
+    
+    <script src="brrrr-calculator.js"></script>
+    <script src="brrrr-storage.js"></script>
+    <script>
+        // Initialize calculator and storage
+        const calculator = new BRRRRCalculator();
+        const storage = new BRRRRStorage();
+        
+        // Form handling for property analysis
+        document.getElementById('propertyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const propertyData = {
+                mlsNumber: document.getElementById('mlsNumber').value,
+                propertyAddress: document.getElementById('propertyAddress').value,
+                purchasePrice: parseFloat(document.getElementById('purchasePrice').value),
+                afterRepairValue: parseFloat(document.getElementById('afterRepairValue').value),
+                repairCosts: parseFloat(document.getElementById('repairCosts').value),
+                rentalIncome: parseFloat(document.getElementById('rentalIncome').value),
+                propertyType: document.getElementById('propertyType').value,
+                propertyNotes: document.getElementById('propertyNotes').value
+            };
+            
+            // Validate required fields
+            if (!propertyData.propertyAddress || !propertyData.purchasePrice || 
+                !propertyData.afterRepairValue || !propertyData.repairCosts || 
+                !propertyData.rentalIncome || !propertyData.propertyType) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Calculate BRRRR analysis
+            const analysisResult = calculator.calculateBRRRR(propertyData);
+            
+            // Save to storage
+            if (storage.saveAnalysis(analysisResult)) {
+                // Show results
+                showAnalysisResults(analysisResult);
+                
+                // Update stats
+                updateStats();
+                
+                // Reset form
+                this.reset();
+            } else {
+                alert('Error saving analysis. Please try again.');
+            }
+        });
+        
+        // Form handling for YouTube analysis
+        document.getElementById('youtubeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const videoData = {
+                videoTitle: document.getElementById('videoTitle').value,
+                youtubeUrl: document.getElementById('youtubeUrl').value,
+                analysisType: document.getElementById('analysisType').value,
+                videoNotes: document.getElementById('videoNotes').value
+            };
+            
+            if (!videoData.videoTitle || !videoData.youtubeUrl || !videoData.analysisType) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Create analysis result for YouTube video
+            const analysisResult = {
+                propertyData: {
+                    propertyAddress: 'YouTube Video Analysis',
+                    mlsNumber: 'VIDEO',
+                    purchasePrice: 0,
+                    afterRepairValue: 0,
+                    repairCosts: 0,
+                    rentalIncome: 0,
+                    propertyType: 'video-analysis',
+                    propertyNotes: `Video: ${videoData.videoTitle}\nURL: ${videoData.youtubeUrl}\nType: ${videoData.analysisType}\nNotes: ${videoData.videoNotes}`,
+                    youtubeUrl: videoData.youtubeUrl
+                },
+                calculations: {
+                    totalInvestment: 0,
+                    arvIncrease: 0,
+                    rehabROI: 0,
+                    monthlyExpenses: { total: 0 },
+                    monthlyCashFlow: 0,
+                    annualCashFlow: 0,
+                    roi: 0,
+                    rentPitiRatio: 0,
+                    dscr: 0,
+                    capRate: 0,
+                    refinanceAnalysis: { cashOut: 0 },
+                    riskScore: 50,
+                    dealScore: 5.0
+                },
+                timestamp: new Date().toISOString(),
+                analysisId: calculator.generateAnalysisId()
+            };
+            
+            if (storage.saveAnalysis(analysisResult)) {
+                alert('YouTube analysis saved successfully! Check the Results Dashboard to view all analyses.');
+                this.reset();
+                updateStats();
+            } else {
+                alert('Error saving analysis. Please try again.');
+            }
+        });
+        
+        // Show analysis results
+        function showAnalysisResults(analysis) {
+            const dealScore = analysis.calculations.dealScore;
+            const scoreText = dealScore >= 8 ? 'Excellent' : dealScore >= 6 ? 'Good' : dealScore >= 4 ? 'Fair' : 'Poor';
+            
+            const results = `
+🏠 BRRRR Analysis Complete!
+
+Property: ${analysis.propertyData.propertyAddress}
+Deal Score: ${dealScore.toFixed(1)}/10 (${scoreText})
+
+💰 Financial Summary:
+• Purchase Price: ${calculator.formatCurrency(analysis.propertyData.purchasePrice)}
+• ARV: ${calculator.formatCurrency(analysis.propertyData.afterRepairValue)}
+• Rehab Costs: ${calculator.formatCurrency(analysis.propertyData.repairCosts)}
+• Monthly Cash Flow: ${calculator.formatCurrency(analysis.calculations.monthlyCashFlow)}
+• ROI: ${calculator.formatPercentage(analysis.calculations.roi)}
+• Rent/PITI Ratio: ${analysis.calculations.rentPitiRatio.toFixed(2)}
+• DSCR: ${analysis.calculations.dscr.toFixed(2)}
+• Cap Rate: ${calculator.formatPercentage(analysis.calculations.capRate)}
+
+🏦 Refinance Analysis:
+• Cash Out: ${calculator.formatCurrency(analysis.calculations.refinanceAnalysis.cashOut)}
+
+📊 Risk Assessment:
+• Risk Score: ${analysis.calculations.riskScore.toFixed(0)}/100
+
+Analysis saved! View all results in the Dashboard.
+            `;
+            
+            alert(results);
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const stats = storage.getStats();
+            document.getElementById('totalAnalyses').textContent = stats.totalAnalyses;
+            document.getElementById('totalProperties').textContent = stats.totalProperties;
+            document.getElementById('totalVideos').textContent = stats.totalVideos;
+            document.getElementById('totalDeals').textContent = stats.totalDeals;
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏠 BRRRR Analyzer Hub Loaded');
+            updateStats();
+            
+            // Add dashboard link
+            const dashboardLink = document.createElement('div');
+            dashboardLink.style.textAlign = 'center';
+            dashboardLink.style.marginTop = '20px';
+            dashboardLink.innerHTML = `
+                <a href="BRRRR_RESULTS_DASHBOARD.html" class="btn secondary" style="display: inline-block; padding: 15px 30px; text-decoration: none; margin-right: 15px;">
+                    📊 View Results Dashboard
+                </a>
+                <a href="brrrr_deal_analysis_all_versions.html" class="btn secondary" style="display: inline-block; padding: 15px 30px; text-decoration: none; margin-right: 15px;">
+                    🏠 Seattle Deal Analysis
+                </a>
+                <a href="rental_income_analysis_all_versions.html" class="btn secondary" style="display: inline-block; padding: 15px 30px; text-decoration: none; margin-right: 15px;">
+                    💰 Rental Income Analysis
+                </a>
+                <a href="market_analysis_all_versions.html" class="btn secondary" style="display: inline-block; padding: 15px 30px; text-decoration: none;">
+                    📈 Market Analysis
+                </a>
+            `;
+            document.querySelector('.footer').appendChild(dashboardLink);
+        });
+    </script>
+</body>
+</html> 

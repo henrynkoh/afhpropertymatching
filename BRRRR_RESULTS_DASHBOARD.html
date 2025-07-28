@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 BRRRR Results Dashboard - Analysis History</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c1810 0%, #4a1f1f 50%, #2c1810 100%);
+            color: #e6e6fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: #e6e6fa;
+            margin-bottom: 20px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            color: #ffd700;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #e6e6fa;
+            margin-top: 5px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .controls-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .control-group label {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .control-group input, .control-group select {
+            padding: 10px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #e6e6fa;
+            font-size: 1rem;
+        }
+        
+        .control-group input:focus, .control-group select:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #4169e1, #6495ed);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
+        }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #2c1810;
+        }
+        
+        .btn.secondary:hover {
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        .btn.danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+        
+        .btn.danger:hover {
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+        
+        .results-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .result-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .result-title {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .result-title h3 {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .result-title p {
+            color: #e6e6fa;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .deal-score {
+            text-align: center;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            min-width: 80px;
+        }
+        
+        .deal-score.excellent {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 2px solid #28a745;
+        }
+        
+        .deal-score.good {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 2px solid #ffc107;
+        }
+        
+        .deal-score.fair {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+            border: 2px solid #ff9800;
+        }
+        
+        .deal-score.poor {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 2px solid #dc3545;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            color: #e6e6fa;
+            opacity: 0.8;
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .result-actions .btn {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #e6e6fa;
+            font-size: 1.2rem;
+        }
+        
+        .no-results h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #ffd700;
+            font-size: 1.1rem;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            border-top: 3px solid #ffd700;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #2c1810 0%, #4a1f1f 100%);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid #ffd700;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            color: #ffd700;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .close {
+            color: #ffd700;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #e6e6fa;
+        }
+        
+        .detail-section {
+            margin-bottom: 25px;
+        }
+        
+        .detail-section h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .detail-label {
+            font-size: 0.9rem;
+            color: #e6e6fa;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1.1rem;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .result-title {
+                min-width: auto;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 BRRRR Results Dashboard</h1>
+        <p class="subtitle">Complete Analysis History & Performance Tracking</p>
+        
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number" id="totalAnalyses">0</span>
+                <span class="stat-label">Total Analyses</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="totalProperties">0</span>
+                <span class="stat-label">Properties Analyzed</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="totalVideos">0</span>
+                <span class="stat-label">Video Analyses</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="totalDeals">0</span>
+                <span class="stat-label">Good Deals Found</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Controls Section -->
+        <div class="controls-section">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="searchInput">Search Properties</label>
+                    <input type="text" id="searchInput" placeholder="Address, MLS, or notes...">
+                </div>
+                
+                <div class="control-group">
+                    <label for="propertyTypeFilter">Property Type</label>
+                    <select id="propertyTypeFilter">
+                        <option value="">All Types</option>
+                        <option value="single-family">Single Family</option>
+                        <option value="duplex">Duplex</option>
+                        <option value="triplex">Triplex</option>
+                        <option value="quadplex">Quadplex</option>
+                        <option value="mixed-use">Mixed-Use</option>
+                        <option value="commercial">Commercial</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="dealScoreFilter">Deal Score</label>
+                    <select id="dealScoreFilter">
+                        <option value="">All Scores</option>
+                        <option value="8-10">Excellent (8-10)</option>
+                        <option value="6-7">Good (6-7)</option>
+                        <option value="4-5">Fair (4-5)</option>
+                        <option value="0-3">Poor (0-3)</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <button class="btn" onclick="refreshResults()">🔄 Refresh</button>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn secondary" onclick="exportAnalyses()">📤 Export All</button>
+                <button class="btn secondary" onclick="importAnalyses()">📥 Import</button>
+                <button class="btn danger" onclick="clearAllAnalyses()">🗑️ Clear All</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleFileImport(event)">
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-grid" id="resultsContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading analyses...
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Analysis Details</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalBody">
+                <!-- Modal content will be populated here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div style="text-align: center; padding: 20px;">
+        <a href="MASTER_BRRRR_ANALYZER_HUB.html" class="btn secondary">🏠 Back to Analyzer Hub</a>
+    </div>
+    
+    <script src="brrrr-calculator.js"></script>
+    <script src="brrrr-storage.js"></script>
+    <script>
+        // Initialize storage and calculator
+        const storage = new BRRRRStorage();
+        const calculator = new BRRRRCalculator();
+        
+        // Global variables
+        let currentAnalyses = [];
+        let filteredAnalyses = [];
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+            setupEventListeners();
+        });
+        
+        // Load dashboard data
+        function loadDashboard() {
+            updateStats();
+            loadAnalyses();
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const stats = storage.getStats();
+            document.getElementById('totalAnalyses').textContent = stats.totalAnalyses;
+            document.getElementById('totalProperties').textContent = stats.totalProperties;
+            document.getElementById('totalVideos').textContent = stats.totalVideos;
+            document.getElementById('totalDeals').textContent = stats.totalDeals;
+        }
+        
+        // Load and display analyses
+        function loadAnalyses() {
+            currentAnalyses = storage.getAllAnalyses();
+            filteredAnalyses = [...currentAnalyses];
+            displayAnalyses();
+        }
+        
+        // Display analyses in the grid
+        function displayAnalyses() {
+            const container = document.getElementById('resultsContainer');
+            
+            if (filteredAnalyses.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h3>📊 No Analyses Found</h3>
+                        <p>Start by analyzing a property in the BRRRR Analyzer Hub</p>
+                        <a href="MASTER_BRRRR_ANALYZER_HUB.html" class="btn">🏠 Go to Analyzer</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredAnalyses.map(analysis => createAnalysisCard(analysis)).join('');
+        }
+        
+        // Create analysis card HTML
+        function createAnalysisCard(analysis) {
+            const dealScore = analysis.calculations.dealScore;
+            const scoreClass = getScoreClass(dealScore);
+            const scoreText = getScoreText(dealScore);
+            
+            return `
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="result-title">
+                            <h3>${analysis.propertyData.propertyAddress}</h3>
+                            <p>MLS: ${analysis.propertyData.mlsNumber || 'N/A'} | ${analysis.propertyData.propertyType} | ${new Date(analysis.timestamp).toLocaleDateString()}</p>
+                        </div>
+                        <div class="deal-score ${scoreClass}">
+                            ${dealScore.toFixed(1)}
+                            <div style="font-size: 0.7rem;">${scoreText}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-value">${calculator.formatCurrency(analysis.propertyData.purchasePrice)}</div>
+                            <div class="metric-label">Purchase Price</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">${calculator.formatCurrency(analysis.calculations.monthlyCashFlow)}</div>
+                            <div class="metric-label">Monthly Cash Flow</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">${calculator.formatPercentage(analysis.calculations.roi)}</div>
+                            <div class="metric-label">ROI</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">${analysis.calculations.rentPitiRatio.toFixed(2)}</div>
+                            <div class="metric-label">Rent/PITI Ratio</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">${analysis.calculations.dscr.toFixed(2)}</div>
+                            <div class="metric-label">DSCR</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">${calculator.formatPercentage(analysis.calculations.capRate)}</div>
+                            <div class="metric-label">Cap Rate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-actions">
+                        <button class="btn" onclick="viewDetails('${analysis.analysisId}')">📋 View Details</button>
+                        <button class="btn secondary" onclick="generateVideo('${analysis.analysisId}')">🎬 Generate Video</button>
+                        <button class="btn danger" onclick="deleteAnalysis('${analysis.analysisId}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Get score class for styling
+        function getScoreClass(score) {
+            if (score >= 8) return 'excellent';
+            if (score >= 6) return 'good';
+            if (score >= 4) return 'fair';
+            return 'poor';
+        }
+        
+        // Get score text
+        function getScoreText(score) {
+            if (score >= 8) return 'Excellent';
+            if (score >= 6) return 'Good';
+            if (score >= 4) return 'Fair';
+            return 'Poor';
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', filterAnalyses);
+            document.getElementById('propertyTypeFilter').addEventListener('change', filterAnalyses);
+            document.getElementById('dealScoreFilter').addEventListener('change', filterAnalyses);
+        }
+        
+        // Filter analyses
+        function filterAnalyses() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const propertyType = document.getElementById('propertyTypeFilter').value;
+            const dealScoreRange = document.getElementById('dealScoreFilter').value;
+            
+            filteredAnalyses = currentAnalyses.filter(analysis => {
+                // Search filter
+                const searchMatch = !searchTerm || 
+                    analysis.propertyData.propertyAddress.toLowerCase().includes(searchTerm) ||
+                    (analysis.propertyData.mlsNumber && analysis.propertyData.mlsNumber.toLowerCase().includes(searchTerm)) ||
+                    (analysis.propertyData.propertyNotes && analysis.propertyData.propertyNotes.toLowerCase().includes(searchTerm));
+                
+                // Property type filter
+                const typeMatch = !propertyType || analysis.propertyData.propertyType === propertyType;
+                
+                // Deal score filter
+                let scoreMatch = true;
+                if (dealScoreRange) {
+                    const [min, max] = dealScoreRange.split('-').map(Number);
+                    const score = analysis.calculations.dealScore;
+                    scoreMatch = score >= min && score <= max;
+                }
+                
+                return searchMatch && typeMatch && scoreMatch;
+            });
+            
+            displayAnalyses();
+        }
+        
+        // View analysis details
+        function viewDetails(analysisId) {
+            const analysis = storage.getAnalysisById(analysisId);
+            if (!analysis) return;
+            
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = createDetailView(analysis);
+            
+            document.getElementById('detailModal').style.display = 'block';
+        }
+        
+        // Create detail view HTML
+        function createDetailView(analysis) {
+            return `
+                <div class="detail-section">
+                    <h4>🏠 Property Information</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Address</div>
+                            <div class="detail-value">${analysis.propertyData.propertyAddress}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">MLS Number</div>
+                            <div class="detail-value">${analysis.propertyData.mlsNumber || 'N/A'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Property Type</div>
+                            <div class="detail-value">${analysis.propertyData.propertyType}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Purchase Price</div>
+                            <div class="detail-value">${calculator.formatCurrency(analysis.propertyData.purchasePrice)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">ARV</div>
+                            <div class="detail-value">${calculator.formatCurrency(analysis.propertyData.arv)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rehab Costs</div>
+                            <div class="detail-value">${calculator.formatCurrency(analysis.propertyData.rehabCosts)}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>💰 Financial Metrics</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Total Investment</div>
+                            <div class="detail-value">${calculator.formatCurrency(analysis.calculations.totalInvestment)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Monthly Cash Flow</div>
+                            <div class="detail-value">${calculator.formatCurrency(analysis.calculations.monthlyCashFlow)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Annual Cash Flow</div>
+                            <div class="detail-value">${calculator.formatCurrency(analysis.calculations.annualCashFlow)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">ROI</div>
+                            <div class="detail-value">${calculator.formatPercentage(analysis.calculations.roi)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rent/PITI Ratio</div>
+                            <div class="detail-value">${analysis.calculations.rentPitiRatio.toFixed(2)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">DSCR</div>
+                            <div class="detail-value">${analysis.calculations.dscr.toFixed(2)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Cap Rate</div>
+                            <div class="detail-value">${calculator.formatPercentage(analysis.calculations.capRate)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Rehab ROI</div>
+                            <div class="detail-value">${calculator.formatPercentage(analysis.calculations.rehabROI)}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>🏦 Refinance Analysis</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Refinance Amount</div>
+                            <div class="detail-value">${calculator.formatCurrency(analysis.calculations.refinanceAnalysis.refinanceAmount)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Cash Out</div>
+                            <div class="detail-value">${calculator.formatCurrency(analysis.calculations.refinanceAnalysis.cashOut)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">LTV</div>
+                            <div class="detail-value">${(analysis.calculations.refinanceAnalysis.refinanceLTV * 100).toFixed(0)}%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>📊 Risk Assessment</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Deal Score</div>
+                            <div class="detail-value">${analysis.calculations.dealScore.toFixed(1)}/10</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Risk Score</div>
+                            <div class="detail-value">${analysis.calculations.riskScore.toFixed(0)}/100</div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${analysis.propertyData.propertyNotes ? `
+                <div class="detail-section">
+                    <h4>📝 Notes</h4>
+                    <div class="detail-item">
+                        <div class="detail-value">${analysis.propertyData.propertyNotes}</div>
+                    </div>
+                </div>
+                ` : ''}
+            `;
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+        
+        // Generate video content
+        function generateVideo(analysisId) {
+            const analysis = storage.getAnalysisById(analysisId);
+            if (!analysis) return;
+            
+            const dealScore = analysis.calculations.dealScore;
+            const address = analysis.propertyData.propertyAddress;
+            const purchasePrice = analysis.propertyData.purchasePrice;
+            const monthlyCashFlow = analysis.calculations.monthlyCashFlow;
+            const roi = analysis.calculations.roi;
+            
+            const videoContent = `
+15-Second Version:
+"${calculator.formatCurrency(purchasePrice)} ${address.split(',')[0]} - BRRRR analysis shows ${calculator.formatPercentage(roi)} ROI with ${calculator.formatCurrency(monthlyCashFlow)} monthly cash flow. Deal score: ${dealScore.toFixed(1)}/10!"
+
+30-Second Version:
+"BRRRR Deal Analysis: ${calculator.formatCurrency(purchasePrice)} property in ${address.split(',')[1]?.trim() || 'Seattle'}. Monthly cash flow: ${calculator.formatCurrency(monthlyCashFlow)}, ROI: ${calculator.formatPercentage(roi)}, Rent/PITI: ${analysis.calculations.rentPitiRatio.toFixed(2)}. Deal score: ${dealScore.toFixed(1)}/10!"
+
+60-Second Version:
+"Complete BRRRR Analysis: ${calculator.formatCurrency(purchasePrice)} ${address}. Purchase: ${calculator.formatCurrency(analysis.propertyData.purchasePrice)}, ARV: ${calculator.formatCurrency(analysis.propertyData.arv)}, Rehab: ${calculator.formatCurrency(analysis.propertyData.rehabCosts)}. Cash flow: ${calculator.formatCurrency(monthlyCashFlow)}/month, ROI: ${calculator.formatPercentage(roi)}, DSCR: ${analysis.calculations.dscr.toFixed(2)}. Refinance cash-out: ${calculator.formatCurrency(analysis.calculations.refinanceAnalysis.cashOut)}. Deal score: ${dealScore.toFixed(1)}/10!"
+            `;
+            
+            alert('Video Content Generated!\n\n' + videoContent);
+        }
+        
+        // Delete analysis
+        function deleteAnalysis(analysisId) {
+            if (confirm('Are you sure you want to delete this analysis?')) {
+                if (storage.deleteAnalysis(analysisId)) {
+                    loadDashboard();
+                } else {
+                    alert('Error deleting analysis');
+                }
+            }
+        }
+        
+        // Refresh results
+        function refreshResults() {
+            loadDashboard();
+        }
+        
+        // Export analyses
+        function exportAnalyses() {
+            if (storage.exportAnalyses()) {
+                alert('Analyses exported successfully!');
+            } else {
+                alert('Error exporting analyses');
+            }
+        }
+        
+        // Import analyses
+        function importAnalyses() {
+            document.getElementById('importFile').click();
+        }
+        
+        // Handle file import
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            storage.importAnalyses(file)
+                .then(result => {
+                    alert(`Successfully imported ${result.imported} analyses! Total: ${result.total}`);
+                    loadDashboard();
+                })
+                .catch(error => {
+                    alert('Error importing file: ' + error.message);
+                });
+            
+            // Reset file input
+            event.target.value = '';
+        }
+        
+        // Clear all analyses
+        function clearAllAnalyses() {
+            if (confirm('Are you sure you want to clear ALL analyses? This cannot be undone.')) {
+                if (storage.clearAllAnalyses()) {
+                    loadDashboard();
+                    alert('All analyses cleared successfully!');
+                } else {
+                    alert('Error clearing analyses');
+                }
+            }
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html> 
