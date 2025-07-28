@@ -1,0 +1,62 @@
+# Exclude everything by default
+*
+
+# Include only BRRRR Analyzer Hub files
+!MASTER_BRRRR_ANALYZER_HUB.html
+!BRRRR_RESULTS_DASHBOARD.html
+!brrrr_deal_analysis_all_versions.html
+!rental_income_analysis_all_versions.html
+!market_analysis_all_versions.html
+!brrrr-calculator.js
+!brrrr-storage.js
+!BRRRR_ANALYZER_HUB_COMPLETE_PROMPT.md
+!ADU_BRRRR_ANALYSIS_GUIDE.md
+!README.md
+
+# Exclude specific directories
+wordsoftruth/
+real_estate_series/
+config/
+*.mp4
+*.m4a
+*.aiff
+*.html
+!MASTER_BRRRR_ANALYZER_HUB.html
+!BRRRR_RESULTS_DASHBOARD.html
+!brrrr_deal_analysis_all_versions.html
+!rental_income_analysis_all_versions.html
+!market_analysis_all_versions.html
+
+# Exclude Python and Ruby files
+*.py
+*.rb
+*.sh
+
+# Exclude documentation files
+*.md
+!BRRRR_ANALYZER_HUB_COMPLETE_PROMPT.md
+!ADU_BRRRR_ANALYSIS_GUIDE.md
+!README.md
+!BRRRR_ANALYZER_HUB_README.md
+!BRRRR_ANALYZER_HUB_MANUAL.md
+!BRRRR_ANALYZER_HUB_TUTORIAL.md
+!BRRRR_ANALYZER_HUB_QUICKSTART.md
+!facebook_ads.md
+!instagram_ads.md
+!threads_ads.md
+!blogger_ads.md
+!naver_blog_ads.md
+!tistory_ads.md
+
+# Exclude directories
+*/
+!BRRRR-Analyzer-Hub/
+
+# Exclude system files
+.DS_Store
+Thumbs.db
+
+# Exclude temporary files
+*.tmp
+*.temp
+*.log 
