@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 BRRRR Master Hub - Property Analysis Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c1810 0%, #4a1f1f 50%, #2c1810 100%);
+            color: #e6e6fa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="8" fill="%23ffd700" opacity="0.1">🏠💰📊</text></svg>') repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-weight: bold;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2rem;
+            color: #e6e6fa;
+            max-width: 800px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            color: #ffd700;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #e6e6fa;
+            margin-top: 5px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #e6e6fa;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: #ffd700;
+            color: #2c1810;
+            border-color: #ffd700;
+        }
+        
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .property-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+        }
+        
+        .property-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .property-title {
+            color: #ffd700;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .property-address {
+            color: #e6e6fa;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .deal-score {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: 2px solid;
+        }
+        
+        .deal-score.excellent { border-color: #4CAF50; color: #4CAF50; }
+        .deal-score.good { border-color: #4CAF50; color: #4CAF50; }
+        .deal-score.moderate { border-color: #FF9800; color: #FF9800; }
+        .deal-score.poor { border-color: #f44336; color: #f44336; }
+        
+        .property-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            color: #e6e6fa;
+            opacity: 0.8;
+        }
+        
+        .property-insights {
+            margin-top: 15px;
+        }
+        
+        .insight-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .insight-icon {
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+        
+        .positive { color: #4CAF50; }
+        .neutral { color: #FF9800; }
+        .negative { color: #f44336; }
+        
+        .view-details-btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #2c1810;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .view-details-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .summary-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .summary-title {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .summary-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .summary-label {
+            color: #e6e6fa;
+            font-size: 0.9rem;
+        }
+        
+        .add-property-section {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px dashed #4CAF50;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .add-property-title {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .add-property-text {
+            color: #e6e6fa;
+            margin-bottom: 20px;
+        }
+        
+        .add-property-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .add-property-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .property-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 15px;
+            }
+            
+            .stat-item {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>🏠 BRRRR Master Hub</h1>
+            <p class="subtitle">Comprehensive Property Analysis Dashboard</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">10</span>
+                    <span class="stat-label">Properties Analyzed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">$6,856,950</span>
+                    <span class="stat-label">Total Investment</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">$13,730</span>
+                    <span class="stat-label">Monthly Cash Flow</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">7.1</span>
+                    <span class="stat-label">Avg Deal Score</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterProperties('all')">All Properties</button>
+            <button class="filter-btn" onclick="filterProperties('excellent')">Excellent (8+)</button>
+            <button class="filter-btn" onclick="filterProperties('good')">Good (6-8)</button>
+            <button class="filter-btn" onclick="filterProperties('moderate')">Moderate (4-6)</button>
+        </div>
+
+        <div class="properties-grid" id="propertiesGrid">
+            <!-- Shoreline Property -->
+            <div class="property-card" data-score="8.4" data-category="excellent">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Shoreline, WA Property</div>
+                        <div class="property-address">812 NE 175th Street, Shoreline, WA 98155</div>
+                    </div>
+                    <div class="deal-score excellent">8.4</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$825,000</div>
+                        <div class="metric-label">Purchase Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$1,100,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$1,850</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">24.1%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Exceptional Rehab ROI: 289%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Strong Cash Flow: $1,850/month</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>High DSCR: 1.95x</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>High Investment: $920,000 total</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_812_ne_175th.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+
+            <!-- Belleville Property -->
+            <div class="property-card" data-score="6.8" data-category="good">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Belleville, IL Property</div>
+                        <div class="property-address">12 HiL Char Dr. Belleville, IL 62226</div>
+                    </div>
+                    <div class="deal-score good">6.8</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$209,100</div>
+                        <div class="metric-label">Purchase Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$295,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$400</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">8.5%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Strong Rehab ROI: 205%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Affordable Entry: $209,100</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Stable Market</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>Lower Cash Flow: $400/month</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_12_hil_char_dr.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+
+            <!-- Ballard Property -->
+            <div class="property-card" data-score="8.7" data-category="excellent">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Ballard, Seattle Property</div>
+                        <div class="property-address">7342 15th Ave NW, Ballard, Seattle, WA 98117</div>
+                    </div>
+                    <div class="deal-score excellent">8.7</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$848,000</div>
+                        <div class="metric-label">Listing Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$1,350,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$3,080</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">36.0%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Exceptional Rehab ROI: 279%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Mixed-use Property</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Prime Ballard Location</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Development Potential</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_7342_15th_ave_nw.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+
+            <!-- Renton Property 1 - 15607 129th Place SE -->
+            <div class="property-card" data-score="6.2" data-category="moderate">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Renton, WA Property</div>
+                        <div class="property-address">15607 129th Place SE, Renton, WA 98058</div>
+                    </div>
+                    <div class="deal-score moderate">6.2</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$615,000</div>
+                        <div class="metric-label">Listing Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$780,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$800</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">14.3%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Strong Rehab ROI: 300%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Price Reduction: $25K</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Good DSCR: 1.30x</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>1981 Split Entry</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_15607_129th_place_se.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+
+            <!-- Renton Property 2 - 1521 Lake Ave S (Talbot Hill) -->
+            <div class="property-card" data-score="5.8" data-category="moderate">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Renton, WA - Talbot Hill</div>
+                        <div class="property-address">1521 Lake Ave S, Renton, WA 98055</div>
+                    </div>
+                    <div class="deal-score moderate">5.8</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$625,000</div>
+                        <div class="metric-label">Listing Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$800,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$600</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">10.3%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Talbot Hill Premium Location</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Strong Rehab ROI: 233%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>1959 Construction</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>Single Bathroom</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_1521_lake_ave_s.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+
+            <!-- Renton Property 3 - 16554 119th Ave SE (5BR) -->
+            <div class="property-card" data-score="7.2" data-category="good">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Renton, WA - Large Family Home</div>
+                        <div class="property-address">16554 119th Ave SE, Renton, WA 98058</div>
+                    </div>
+                    <div class="deal-score good">7.2</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$699,950</div>
+                        <div class="metric-label">Listing Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$900,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$1,200</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">18.4%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Rare 5-Bedroom Home</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Strong Rehab ROI: 235%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Large Lot: 0.272 acres</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>High Rental Demand</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_16554_119th_ave_se.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+
+            <!-- Renton Property 4 - 2409 NE 11th Ct (2003) -->
+            <div class="property-card" data-score="6.5" data-category="moderate">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Renton, WA - Newer Construction</div>
+                        <div class="property-address">2409 NE 11th Ct, Renton, WA 98056</div>
+                    </div>
+                    <div class="deal-score moderate">6.5</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$709,950</div>
+                        <div class="metric-label">Listing Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$850,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$900</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">14.2%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>2003 Construction</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Strong Rehab ROI: 280%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Price Reduction: $30K</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>Lower Cash Flow</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_2409_ne_11th_ct.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+
+            <!-- Renton Property 5 - 16044 114th Ave SE (Benson Hill) -->
+            <div class="property-card" data-score="5.2" data-category="moderate">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Renton, WA - Benson Hill</div>
+                        <div class="property-address">16044 114th Ave SE, Renton, WA 98055</div>
+                    </div>
+                    <div class="deal-score moderate">5.2</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$749,950</div>
+                        <div class="metric-label">Listing Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$950,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$700</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">10.0%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Large Lot: 0.478 acres</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Strong Rehab ROI: 222%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>1952 Construction</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>Price Increase: $50K</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_16044_114th_ave_se.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+
+            <!-- Renton Property 6 - 16621 148th Ave SE (Fairwood Greens) -->
+            <div class="property-card" data-score="6.0" data-category="moderate">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Renton, WA - Fairwood Greens</div>
+                        <div class="property-address">16621 148th Ave SE, Renton, WA 98058</div>
+                    </div>
+                    <div class="deal-score moderate">6.0</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$774,950</div>
+                        <div class="metric-label">Listing Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$900,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$800</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">11.4%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>HOA Community</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Strong Rehab ROI: 179%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Price Reduction: $50K</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon neutral">⚠️</span>
+                        <span>HOA Dues: $225/month</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_16621_148th_ave_se.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+        </div>
+
+            <!-- Seattle Property -->
+            <div class="property-card" data-score="8.7" data-category="excellent">
+                <div class="property-header">
+                    <div>
+                        <div class="property-title">Seattle, WA Property</div>
+                        <div class="property-address">9345 37th Ave S, Seattle, WA 98118</div>
+                    </div>
+                    <div class="deal-score excellent">8.7</div>
+                </div>
+                
+                <div class="property-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$699,000</div>
+                        <div class="metric-label">Purchase Price</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$1,125,000</div>
+                        <div class="metric-label">ARV</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$2,400</div>
+                        <div class="metric-label">Monthly Cash Flow</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">35.0%</div>
+                        <div class="metric-label">Annual ROI</div>
+                    </div>
+                </div>
+                
+                <div class="property-insights">
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Exceptional Rehab ROI: 341%</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>5BR/2.5BA Large Home</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>Excellent DSCR: 1.86x</span>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon positive">✅</span>
+                        <span>2,500 sqft Spacious</span>
+                    </div>
+                </div>
+                
+                <button class="view-details-btn" onclick="openAnalysis('property_analysis_9345_37th_ave_s.html')">
+                    📊 View Full Analysis
+                </button>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h2 class="summary-title">📈 Portfolio Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-value">$6,856,950</div>
+                    <div class="summary-label">Total Investment</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">$1,701,800</div>
+                    <div class="summary-label">Total Equity Created</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">$13,730</div>
+                    <div class="summary-label">Combined Monthly Cash Flow</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">$164,760</div>
+                    <div class="summary-label">Annual Cash Flow</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">18.5%</div>
+                    <div class="summary-label">Average Annual ROI</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">248%</div>
+                    <div class="summary-label">Average Rehab ROI</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-property-section">
+            <h3 class="add-property-title">➕ Add New Property Analysis</h3>
+            <p class="add-property-text">
+                Use the BRRRR analysis prompt to analyze additional properties and add them to this dashboard.
+            </p>
+            <button class="add-property-btn" onclick="showAnalysisPrompt()">
+                📋 Show Analysis Prompt
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Filter properties based on deal score
+        function filterProperties(category) {
+            const cards = document.querySelectorAll('.property-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Open detailed analysis
+        function openAnalysis(filename) {
+            window.open(filename, '_blank');
+        }
+        
+        // Show analysis prompt
+        function showAnalysisPrompt() {
+            const prompt = `Let's analyze the following property:
+$[PURCHASE_PRICE]
+[FULL_PROPERTY_ADDRESS]
+
+can you do deep research to find the relevant figures at your best judgement:
+- Actual After Repair Value (ARV)
+- Detailed repair cost breakdown
+- Current market rental rates for the area
+- Property condition and specific repairs needed
+- Your financing terms and rates`;
+            
+            alert('Copy this prompt for new property analysis:\n\n' + prompt);
+        }
+        
+        // Add hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('BRRRR Master Hub loaded');
+            
+            // Add hover effects to property cards
+            const propertyCards = document.querySelectorAll('.property-card');
+            propertyCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
