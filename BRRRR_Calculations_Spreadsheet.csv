@@ -1,0 +1,98 @@
+Property Analysis,Seattle Property - 9345 37th Ave S,Seattle WA 98118
+Category,Input Data,Value,Formula/Calculation,Notes
+Basic Property Info,Listing Price,$699000,Direct input,Property purchase price
+Basic Property Info,Square Footage,2500,Direct input,Verified property size
+Basic Property Info,Bedrooms,5,Direct input,Verified property details
+Basic Property Info,Bathrooms,2.5,Direct input,Verified property details
+Basic Property Info,Year Built,1962,Direct input,Verified property details
+Basic Property Info,Lot Size,9125,Direct input,Square feet
+Basic Property Info,Property Condition,Good,Direct input,Per Redfin assessment
+
+ARV Analysis,Base ARV per sqft,$450,Market research,Seattle 98118 area average
+ARV Analysis,ARV Multiplier,1.0,Direct input,Standard multiplier
+ARV Analysis,After Repair Value (ARV),$1125000,=B4*B5*B6,2500 sqft * $450 * 1.0
+ARV Analysis,ARV Increase,$426000,=B7-B2,ARV - Listing Price
+
+Repair Costs,Kitchen Renovation,$45000,Direct input,Complete remodel for 2,500 sqft
+Repair Costs,Bathroom Updates,$35000,Direct input,2.5 bathrooms total
+Repair Costs,Interior Improvements,$30000,Direct input,Paint, flooring, lighting, doors
+Repair Costs,Exterior & Curb Appeal,$15000,Direct input,Landscaping, paint, roof
+Repair Costs,Total Repair Costs,$125000,=SUM(B11:B14),Sum of all repair categories
+
+Financing,Down Payment %,$139800,=B2*0.20,20% down payment
+Financing,Loan Amount,$559200,=B2-B16,Listing Price - Down Payment
+Financing,Interest Rate,7.5%,Direct input,Current market rate
+Financing,Loan Term,30,Direct input,Years
+Financing,Monthly P&I,$3909,=PMT(B18/12,B19*12,-B17),Monthly principal and interest
+Financing,Property Tax (Monthly),$583,=B2*0.01/12,1% annual property tax
+Financing,Insurance (Monthly),$175,=B2*0.003/12,0.3% annual insurance
+Financing,PMI (Monthly),$0,Direct input,No PMI with 20% down
+Financing,Total Monthly Payment,$4667,=SUM(B20:B23),P&I + Tax + Insurance + PMI
+
+Rental Income,Monthly Rent,$5200,Direct input,Market rate for 5BR/2.5BA
+Rental Income,Annual Rent,$62400,=B25*12,Monthly rent * 12
+
+Expenses,Property Management (8%),$416,=B25*0.08,8% of monthly rent
+Expenses,Vacancy (5%),$260,=B25*0.05,5% vacancy allowance
+Expenses,Maintenance (8%),$416,=B25*0.08,8% for ongoing maintenance
+Expenses,HOA Dues,$0,Direct input,No HOA for this property
+Expenses,Total Monthly Expenses,$1092,=SUM(B28:B31),Sum of all expense categories
+
+Cash Flow,Monthly Cash Flow,$2400,=B25-B24-B32,Rent - Total Payment - Expenses
+Cash Flow,Annual Cash Flow,$28800,=B33*12,Monthly cash flow * 12
+
+Investment Analysis,Total Investment,$824000,=B2+B15,Listing Price + Repair Costs
+Investment Analysis,Equity Created,$426000,=B8,ARV Increase
+Investment Analysis,Annual ROI,35.0%,=B35/B37*100,Annual Cash Flow / Total Investment
+Investment Analysis,Rehab ROI,341%,=B8/B15*100,ARV Increase / Repair Costs
+Investment Analysis,Cap Rate,5.5%,=B35/B7*100,Annual Cash Flow / ARV
+Investment Analysis,DSCR,1.86,=B25/B24,Monthly Rent / Total Monthly Payment
+Investment Analysis,Rent/PITI Ratio,1.86,=B25/B24,Monthly Rent / Total Monthly Payment
+
+Deal Score Components,Cash Flow Score,9,=IF(B33>2000,9,IF(B33>1500,7,IF(B33>1000,5,3))),Score based on monthly cash flow
+Deal Score Components,ROI Score,9,=IF(B39>30,9,IF(B39>20,7,IF(B39>15,5,3))),Score based on annual ROI
+Deal Score Components,Rehab ROI Score,10,=IF(B40>300,10,IF(B40>200,8,IF(B40>150,6,4))),Score based on rehab ROI
+Deal Score Components,DSCR Score,9,=IF(B42>1.5,9,IF(B42>1.3,7,IF(B42>1.1,5,3))),Score based on DSCR
+Deal Score Components,Market Score,8,Direct input,Seattle market strength
+Deal Score Components,Property Score,8,Direct input,5BR/2.5BA premium property
+Deal Score Components,Total Deal Score,8.7,=AVERAGE(B45:B50),Average of all component scores
+
+Portfolio Impact,Properties Analyzed,10,Direct input,Total properties in portfolio
+Portfolio Impact,Total Investment,$6856950,Direct input,Sum of all property investments
+Portfolio Impact,Monthly Cash Flow,$13730,Direct input,Sum of all monthly cash flows
+Portfolio Impact,Annual Cash Flow,$164760,=B54*12,Monthly cash flow * 12
+Portfolio Impact,Total Equity Created,$1701800,Direct input,Sum of all equity created
+Portfolio Impact,Average Annual ROI,18.5%,=B55/B53*100,Portfolio annual cash flow / total investment
+Portfolio Impact,Average Rehab ROI,248%,Direct input,Average of all rehab ROIs
+Portfolio Impact,Average Deal Score,7.1,Direct input,Average of all deal scores
+
+V2 Improvements (Before vs After),V1 ARV,$900000,Direct input,Original estimate
+V2 Improvements (Before vs After),V2 ARV,$1125000,Direct input,Verified ARV
+V2 Improvements (Before vs After),ARV Improvement,$225000,=B62-B61,V2 ARV - V1 ARV
+V2 Improvements (Before vs After),V1 Monthly Cash Flow,$1200,Direct input,Original estimate
+V2 Improvements (Before vs After),V2 Monthly Cash Flow,$2400,Direct input,Verified cash flow
+V2 Improvements (Before vs After),Cash Flow Improvement,$1200,=B65-B64,V2 cash flow - V1 cash flow
+V2 Improvements (Before vs After),V1 Annual ROI,18.4%,Direct input,Original estimate
+V2 Improvements (Before vs After),V2 Annual ROI,35.0%,Direct input,Verified ROI
+V2 Improvements (Before vs After),ROI Improvement,16.6%,=B68-B67,V2 ROI - V1 ROI
+V2 Improvements (Before vs After),V1 Deal Score,6.8,Direct input,Original estimate
+V2 Improvements (Before vs After),V2 Deal Score,8.7,Direct input,Verified deal score
+V2 Improvements (Before vs After),Score Improvement,1.9,=B71-B70,V2 score - V1 score
+
+Excel Formulas Reference,PMT Function,=PMT(rate/12,term*12,-principal),Monthly payment calculation
+Excel Formulas Reference,SUM Function,=SUM(range),Adds all values in range
+Excel Formulas Reference,AVERAGE Function,=AVERAGE(range),Calculates average of range
+Excel Formulas Reference,IF Function,=IF(condition,value_if_true,value_if_false),Conditional logic
+Excel Formulas Reference,Percentage Calculation,=value/total*100,Converts to percentage
+Excel Formulas Reference,Monthly to Annual,=monthly_value*12,Converts monthly to annual
+Excel Formulas Reference,Annual to Monthly,=annual_value/12,Converts annual to monthly
+
+Notes and Assumptions,Property Tax Rate,1.0%,Annual property tax rate
+Notes and Assumptions,Insurance Rate,0.3%,Annual insurance rate
+Notes and Assumptions,Property Management,8%,Monthly management fee
+Notes and Assumptions,Vacancy Rate,5%,Monthly vacancy allowance
+Notes and Assumptions,Maintenance Rate,8%,Monthly maintenance allowance
+Notes and Assumptions,Down Payment,20%,Standard down payment percentage
+Notes and Assumptions,Interest Rate,7.5%,Current market mortgage rate
+Notes and Assumptions,ARV per sqft,$450,Seattle 98118 market rate
+Notes and Assumptions,Rent per sqft,$2.08,=$5200/2500,Monthly rent per square foot 

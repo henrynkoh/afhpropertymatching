@@ -1,0 +1,143 @@
+# BRRRR Advanced Calculator Template
+# This is a CSV representation of a multi-sheet Excel file
+
+# Sheet 1: Property Input Data
+Property_Input_Data,Value,Formula,Notes
+Property Address,9345 37th Ave S Seattle WA 98118,Direct input,Property location
+Listing Price,699000,Direct input,Property purchase price
+Square Footage,2500,Direct input,Verified property size
+Bedrooms,5,Direct input,Number of bedrooms
+Bathrooms,2.5,Direct input,Number of bathrooms
+Year Built,1962,Direct input,Construction year
+Lot Size (sqft),9125,Direct input,Property lot size
+Property Condition,Good,Direct input,Property condition assessment
+Days on Market,61,Direct input,How long property has been listed
+Price per Sq Ft,280,=B2/B3,Listing price divided by square footage
+
+# Sheet 2: ARV Analysis
+ARV_Analysis,Value,Formula,Notes
+Base ARV per sqft,450,Market research,Seattle 98118 area average
+ARV Multiplier,1.0,Direct input,Adjustment factor for property specifics
+After Repair Value (ARV),1125000,=B2*B3*Property_Input_Data!B3,Base ARV * Multiplier * Sq Ft
+ARV Increase,426000,=B4-Property_Input_Data!B2,ARV - Listing Price
+ARV per Sq Ft (Final),450,=B4/Property_Input_Data!B3,Final ARV divided by square footage
+
+# Sheet 3: Repair Cost Breakdown
+Repair_Costs,Cost,Formula,Notes
+Kitchen Renovation,45000,Direct input,Complete kitchen remodel
+Bathroom Updates,35000,Direct input,2.5 bathrooms total renovation
+Interior Improvements,30000,Direct input,Paint, flooring, lighting, doors
+Exterior & Curb Appeal,15000,Direct input,Landscaping, paint, roof work
+Total Repair Costs,125000,=SUM(B2:B5),Sum of all repair categories
+Repair Cost per Sq Ft,50,=B6/Property_Input_Data!B3,Total repair cost per square foot
+
+# Sheet 4: Financing Calculations
+Financing,Value,Formula,Notes
+Down Payment Percentage,20%,Direct input,Standard down payment
+Down Payment Amount,139800,=Property_Input_Data!B2*B2,Listing price * down payment %
+Loan Amount,559200,=Property_Input_Data!B2-B3,Listing price - down payment
+Interest Rate,7.5%,Direct input,Annual interest rate
+Loan Term (Years),30,Direct input,Mortgage term
+Monthly Interest Rate,0.625%,=B5/12,Annual rate divided by 12
+Total Payments,360,=B6*12,Term in years * 12
+Monthly P&I Payment,3909,=PMT(B7,B8,-B4),Monthly principal and interest
+Property Tax Rate,1.0%,Direct input,Annual property tax rate
+Monthly Property Tax,583,=Property_Input_Data!B2*B10/12,Annual tax divided by 12
+Insurance Rate,0.3%,Direct input,Annual insurance rate
+Monthly Insurance,175,=Property_Input_Data!B2*B12/12,Annual insurance divided by 12
+PMI Monthly,0,Direct input,No PMI with 20% down
+Total Monthly Payment,4667,=SUM(B9,B11,B13,B14),P&I + Tax + Insurance + PMI
+
+# Sheet 5: Rental Income Analysis
+Rental_Income,Value,Formula,Notes
+Monthly Rent,5200,Direct input,Market rate for 5BR/2.5BA
+Annual Rent,62400,=B2*12,Monthly rent * 12
+Rent per Sq Ft,2.08,=B2/Property_Input_Data!B3,Monthly rent per square foot
+Annual Rent per Sq Ft,24.96,=B3/Property_Input_Data!B3,Annual rent per square foot
+
+# Sheet 6: Expense Analysis
+Expenses,Amount,Formula,Notes
+Property Management (8%),416,=Rental_Income!B2*0.08,8% of monthly rent
+Vacancy Allowance (5%),260,=Rental_Income!B2*0.05,5% vacancy allowance
+Maintenance (8%),416,=Rental_Income!B2*0.08,8% for ongoing maintenance
+HOA Dues,0,Direct input,No HOA for this property
+Total Monthly Expenses,1092,=SUM(B2:B5),Sum of all expense categories
+Total Annual Expenses,13104,=B6*12,Monthly expenses * 12
+
+# Sheet 7: Cash Flow Analysis
+Cash_Flow,Value,Formula,Notes
+Monthly Cash Flow,2400,=Rental_Income!B2-Financing!B15-Expenses!B6,Rent - Payment - Expenses
+Annual Cash Flow,28800,=B2*12,Monthly cash flow * 12
+Cash on Cash Return,35.0%,=B3/(Property_Input_Data!B2+Repair_Costs!B6)*100,Annual cash flow / total investment
+Monthly Cash Flow per Sq Ft,0.96,=B2/Property_Input_Data!B3,Monthly cash flow per square foot
+
+# Sheet 8: Investment Metrics
+Investment_Metrics,Value,Formula,Notes
+Total Investment,824000,=Property_Input_Data!B2+Repair_Costs!B6,Listing price + repair costs
+Equity Created,426000,=ARV_Analysis!B5,ARV increase
+Annual ROI,35.0%,=Cash_Flow!B3/B2*100,Annual cash flow / total investment
+Rehab ROI,341%,=B3/Repair_Costs!B6*100,Equity created / repair costs
+Cap Rate,5.5%,=Cash_Flow!B3/ARV_Analysis!B4*100,Annual cash flow / ARV
+DSCR,1.86,=Rental_Income!B2/Financing!B15,Monthly rent / total monthly payment
+Rent/PITI Ratio,1.86,=Rental_Income!B2/Financing!B15,Monthly rent / total monthly payment
+Gross Rent Multiplier,13.2,=ARV_Analysis!B4/Rental_Income!B3,ARV / annual rent
+
+# Sheet 9: Deal Scoring System
+Deal_Scoring,Score,Max Score,Formula,Notes
+Cash Flow Score,9,10,=IF(Cash_Flow!B2>2000,9,IF(Cash_Flow!B2>1500,7,IF(Cash_Flow!B2>1000,5,3))),Based on monthly cash flow
+ROI Score,9,10,=IF(Investment_Metrics!B4>30,9,IF(Investment_Metrics!B4>20,7,IF(Investment_Metrics!B4>15,5,3))),Based on annual ROI
+Rehab ROI Score,10,10,=IF(Investment_Metrics!B5>300,10,IF(Investment_Metrics!B5>200,8,IF(Investment_Metrics!B5>150,6,4))),Based on rehab ROI
+DSCR Score,9,10,=IF(Investment_Metrics!B7>1.5,9,IF(Investment_Metrics!B7>1.3,7,IF(Investment_Metrics!B7>1.1,5,3))),Based on DSCR
+Market Score,8,10,Direct input,Seattle market strength
+Property Score,8,10,Direct input,5BR/2.5BA premium property
+Total Deal Score,8.7,10,=AVERAGE(B2:B7),Average of all component scores
+Deal Grade,Excellent,Grade,=IF(B8>=8.5,"Excellent",IF(B8>=7.5,"Good",IF(B8>=6.5,"Fair","Poor"))),Overall deal assessment
+
+# Sheet 10: Portfolio Summary
+Portfolio_Summary,Value,Formula,Notes
+Properties Analyzed,10,Direct input,Total properties in portfolio
+Total Investment,6856950,Direct input,Sum of all property investments
+Total Monthly Cash Flow,13730,Direct input,Sum of all monthly cash flows
+Total Annual Cash Flow,164760,=B3*12,Monthly cash flow * 12
+Total Equity Created,1701800,Direct input,Sum of all equity created
+Average Annual ROI,18.5%,=B4/B2*100,Portfolio annual cash flow / total investment
+Average Rehab ROI,248%,Direct input,Average of all rehab ROIs
+Average Deal Score,7.1,Direct input,Average of all deal scores
+Average Monthly Cash Flow per Property,1373,=B3/B1,Total monthly cash flow / number of properties
+
+# Sheet 11: Sensitivity Analysis
+Sensitivity_Analysis,Base Case,-10%,+10%,-20%,+20%,Notes
+ARV,1125000,1012500,1237500,900000,1350000,After repair value variations
+Monthly Rent,5200,4680,5720,4160,6240,Rental income variations
+Repair Costs,125000,112500,137500,100000,150000,Repair cost variations
+Interest Rate,7.5%,6.75%,8.25%,6%,9%,Interest rate variations
+Monthly Cash Flow,2400,1800,3000,1200,3600,Resulting cash flow variations
+Annual ROI,35.0%,26.3%,43.8%,17.5%,52.5%,Resulting ROI variations
+
+# Sheet 12: Break-Even Analysis
+Break_Even_Analysis,Value,Formula,Notes
+Break-Even Rent,4667,=Financing!B15+Expenses!B6,Total payment + expenses
+Current Rent,5200,=Rental_Income!B2,Actual monthly rent
+Rent Buffer,533,=B2-B1,Excess rent above break-even
+Break-Even Occupancy,89.7%,=B1/B2*100,Break-even rent / current rent
+Safety Margin,10.3%,=100%-B4,Percentage above break-even
+
+# Sheet 13: V2 Improvements Comparison
+V2_Comparison,V1 (Estimated),V2 (Verified),Improvement,Formula,Notes
+ARV,900000,1125000,225000,=B2-B1,V2 ARV - V1 ARV
+Monthly Cash Flow,1200,2400,1200,=B2-B1,V2 cash flow - V1 cash flow
+Annual ROI,18.4%,35.0%,16.6%,=B2-B1,V2 ROI - V1 ROI
+Rehab ROI,236%,341%,105%,=B2-B1,V2 rehab ROI - V1 rehab ROI
+Deal Score,6.8,8.7,1.9,=B2-B1,V2 score - V1 score
+Equity Created,201000,426000,225000,=B2-B1,V2 equity - V1 equity
+
+# Excel Formulas Reference Sheet
+Formula_Reference,Function,Usage,Example
+PMT,=PMT(rate/12,term*12,-principal),Monthly payment calculation,=PMT(7.5%/12,30*12,-559200)
+SUM,=SUM(range),Adds all values in range,=SUM(B2:B10)
+AVERAGE,=AVERAGE(range),Calculates average of range,=AVERAGE(B2:B7)
+IF,=IF(condition,value_if_true,value_if_false),Conditional logic,=IF(B2>2000,9,7)
+VLOOKUP,=VLOOKUP(lookup_value,table_array,col_index),Lookup values,=VLOOKUP(A2,B2:D10,3)
+INDEX/MATCH,=INDEX(range,MATCH(lookup_value,lookup_range)),Advanced lookup,=INDEX(B2:B10,MATCH(A2,A2:A10))
+ROUND,=ROUND(number,num_digits),Rounds to specified digits,=ROUND(B2,2)
+PERCENTAGE,=value/total*100,Converts to percentage,=B2/B3*100 
