@@ -11,13 +11,13 @@ Year Built,1975,
 Days on Market,33,
 ,,
 Renovation Costs,Amount,Category
-Kitchen Renovation,30000,Kitchen
-Bathroom Updates,20000,Bathrooms
-Interior Updates,25000,Interior
-Exterior Maintenance,20000,Exterior
-Systems Updates,25000,Systems
-Contingency (15%),20000,Contingency
-Total Renovation Cost,140000,Total
+Kitchen Renovation,15000,Kitchen
+Bathroom Updates,10000,Bathrooms
+Interior Updates,10000,Interior
+Exterior Maintenance,8000,Exterior
+Systems Updates,7000,Systems
+Contingency (15%),7500,Contingency
+Total Renovation Cost,50000,Total
 ,,
 Financial Analysis,Amount,Calculation
 Total Investment,1029950,=B2+B15
@@ -34,8 +34,8 @@ Loan Amount,667462,=B2-B26
 Monthly PITI,4897,=PMT(B24/12,B25*12,-B27)
 ,,
 Rental Analysis,Amount,Source
-Monthly Rent (Conservative),5200,Market Research
-Monthly Rent (Optimistic),5800,Market Research
+Monthly Rent (Conservative),5000,Market Research
+Monthly Rent (Optimistic),5500,Market Research
 Other Monthly Expenses,650,Insurance/Taxes/Maintenance
 Monthly Cash Flow,-347,=B32-B29-B33
 Annual Cash Flow,-4164,=B34*12

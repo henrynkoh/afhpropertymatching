@@ -12,19 +12,19 @@ Lot Size (acres),0.92,,,,Change this to lot size
 MARKET DATA (Change These Values),,,,,,
 Conservative ARV,1150000,,,,Change this based on your market research
 Optimistic ARV,1250000,,,,Change this based on your market research
-Monthly Rent (Conservative),5200,,,,Change this to expected monthly rent
-Monthly Rent (Optimistic),5800,,,,Change this to expected monthly rent
+Monthly Rent (Conservative),5000,,,,Change this to expected monthly rent
+Monthly Rent (Optimistic),5500,,,,Change this to expected monthly rent
 Interest Rate (%),8,,,,Change this to current interest rate
 Down Payment (%),25,,,,Change this to your down payment percentage
 Loan Term (Years),30,,,,Change this to loan term
 ,,,,,
 REPAIR COSTS (Change These Values),,,,,,
-Kitchen Renovation,30000,,,,Change this to your kitchen repair estimate
-Bathroom Updates,20000,,,,Change this to your bathroom repair estimate
-Interior Updates,25000,,,,Change this to your interior repair estimate
-Exterior Maintenance,20000,,,,Change this to your exterior repair estimate
-Systems Updates,25000,,,,Change this to your systems repair estimate
-Contingency (15%),20000,,,,Change this to your contingency estimate
+Kitchen Renovation,15000,,,,Change this to your kitchen repair estimate
+Bathroom Updates,10000,,,,Change this to your bathroom repair estimate
+Interior Updates,10000,,,,Change this to your interior repair estimate
+Exterior Maintenance,8000,,,,Change this to your exterior repair estimate
+Systems Updates,7000,,,,Change this to your systems repair estimate
+Contingency (15%),7500,,,,Change this to your contingency estimate
 ,,,,,
 EXPENSE RATIOS (Change These Values),,,,,,
 Property Management (%),8,,,,Change this to your management fee percentage
