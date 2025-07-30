@@ -1,122 +1,103 @@
-BRRRR GOOGLE SHEETS CALCULATOR,All formulas are already converted - just import and start changing input values,Change values in YELLOW cells (B6-B33) to analyze different properties,,,
-,,,,,
-PROPERTY INFORMATION (Change These Values),,,,,,
-Property Address,9345 37th Ave S Seattle WA 98118,,,,Change this to your property address
-Listing Price,699000,,,,Change this to your property price
-Square Footage,2500,,,,Change this to your property size
-Bedrooms,5,,,,Change this to number of bedrooms
-Bathrooms,2.5,,,,Change this to number of bathrooms
-Year Built,1962,,,,Change this to year built
-Lot Size (sqft),9125,,,,Change this to lot size
-,,,,,
-MARKET DATA (Change These Values),,,,,,
-Base ARV per sqft,450,,,,Change this based on your market research
-Market Multiplier,1,,,,Adjust for market conditions (0.8-1.2)
-Monthly Rent,5200,,,,Change this to expected monthly rent
-Interest Rate (%),7.5,,,,Change this to current interest rate
-Down Payment (%),20,,,,Change this to your down payment percentage
-Loan Term (Years),30,,,,Change this to loan term
-,,,,,
-REPAIR COSTS (Change These Values),,,,,,
-Kitchen Renovation,45000,,,,Change this to your kitchen repair estimate
-Bathroom Updates,35000,,,,Change this to your bathroom repair estimate
-Interior Improvements,30000,,,,Change this to your interior repair estimate
-Exterior & Curb Appeal,15000,,,,Change this to your exterior repair estimate
-,,,,,
-EXPENSE RATIOS (Change These Values),,,,,,
-Property Management (%),8,,,,Change this to your management fee percentage
-Vacancy Rate (%),5,,,,Change this to expected vacancy rate
-Maintenance (%),3,,,,Change this to maintenance percentage
-Monthly Property Taxes,260,,,,Change this to estimated monthly taxes
-Monthly Insurance,200,,,,Change this to estimated monthly insurance
-,,,,,
-CALCULATIONS (These Update Automatically),,,,,,
-ARV Analysis,,,,,,
-ARV Calculation,=B8*B15*B16,1125000,,,
-ARV Increase,=B37-B7,426000,,,
-ARV per sqft,=B37/B8,450,,,
-,,,,,
-Financing Calculations,,,,,,
-Down Payment Amount,=B7*(B19/100),139800,,,
-Loan Amount,=B7-B42,559200,,,
-Monthly P&I,=PMT(B18/100/12,B20*12,-B43),3909.23,,,
-Annual P&I,=B44*12,46910.76,,,
-Total P&I (30 years),=B44*360,1407322.80,,,
-,,,,,
-Repair Cost Analysis,,,,,,
-Total Repair Costs,=B23+B24+B25+B26,125000,,,
-Rehab ROI,=(B38/B49)*100,340.80,,,
-Total Investment,=B7+B49,824000,,,
-,,,,,
-Rental Income Analysis,,,,,,
-Annual Rent,=B17*12,62400,,,
-Rent per sqft,=B17/B8,2.08,,,
-,,,,,
-Expense Analysis,,,,,,
-Property Management,=B17*(B29/100),416,,,
-Vacancy,=B17*(B30/100),260,,,
-Maintenance,=B17*(B31/100),156,,,
-Total Monthly Expenses,=B58+B59+B60+B32+B33,1292,,,
-Annual Expenses,=B61*12,15504,,,
-,,,,,
-Cash Flow Analysis,,,,,,
-Monthly Cash Flow,=B17-B44-B61,2398.77,,,
-Annual Cash Flow,=B65*12,28785.24,,,
-Cash Flow per sqft,=B65/B8,0.96,,,
-,,,,,
-Investment Metrics,,,,,,
-Annual ROI,=(B66/B51)*100,34.93,,,
-Cap Rate,=(B66/B37)*100,2.56,,,
-DSCR,=B17/B44,1.33,,,
-Rent/PITI Ratio,=B17/B44,1.33,,,
-Cash-on-Cash Return,=(B66/(B42+B49))*100,43.47,,,
-,,,,,
-Deal Scoring System,,,,,,
-Cash Flow Score,=IF(B65>2000,9,IF(B65>1500,7,IF(B65>1000,5,3))),9,,,
-ROI Score,=IF(B70>30,9,IF(B70>20,7,IF(B70>15,5,3))),9,,,
-Rehab ROI Score,=IF(B50>300,10,IF(B50>200,8,IF(B50>150,6,4))),10,,,
-DSCR Score,=IF(B72>1.5,9,IF(B72>1.2,7,IF(B72>1.0,5,3))),7,,,
-Market Score,8,8,,,
-Property Score,8,8,,,
-Total Deal Score,=AVERAGE(B77:B82),8.50,,,
-,,,,,
-Break-Even Analysis,,,,,,
-Break-Even Rent,=B44+B61,5201.23,,,
-Rent Buffer,=B17-B44,1290.77,,,
-Break-Even Occupancy (%),=(B44/B17)*100,75.18,,,
-Safety Margin (%),=100-B88,24.82,,,
-,,,,,
-Sensitivity Analysis,,,,,,
-Variable,Base Case,-10%,+10%,-20%,+20%
-ARV,1125000,1012500,1237500,900000,1350000
-Monthly Rent,5200,4680,5720,4160,6240
-Repair Costs,125000,112500,137500,100000,150000
-,,,,,
-SUMMARY DASHBOARD,,,,,,
-Key Metrics,,,,,,
-Monthly Cash Flow,2398.77,,,,
-Annual ROI,34.93,,,,
-Deal Score,8.50,,,,
-DSCR,1.33,,,,
-Rehab ROI,340.80,,,,
-Break-Even Rent,5201.23,,,,
-Safety Margin,24.82,,,,
-,,,,,
-Investment Assessment,,,,,,
-Overall Assessment,=IF(B83>=8,"Excellent Investment",IF(B83>=7,"Good Investment",IF(B83>=6,"Fair Investment","Poor Investment"))),Excellent Investment,,,
-Risk Level,=IF(B89>=20,"Low",IF(B89>=10,"Medium","High")),Low,,,
-Recommendation,=IF(B83>=8,"Strongly Consider",IF(B83>=7,"Consider with Caution",IF(B83>=6,"Only if Experienced","Avoid"))),Strongly Consider,,,
-,,,,,
-INSTRUCTIONS,,,,,,
-How to Use This Calculator:,,,,,,
-1. Change values in cells B6-B33 (highlighted as input cells),,,,,,
-2. All calculations in sections A35-A131 update automatically,,,,,,
-3. Key metrics are summarized in the Dashboard section,,,,,,
-4. Sensitivity analysis shows impact of changing key variables,,,,,,
-5. Deal scoring provides overall investment assessment,,,,,,
-,,,,,
-Color Coding:,,,,,,
-Yellow cells = Input values you can change,,,,,,
-Green cells = Calculated results,,,,,,
-Blue cells = Summary and assessment,,,,,,
-Orange cells = Sensitivity analysis,,,,,, 
+BRRRR_Google_Sheets_Calculator.csv
+Property Information,Value,Notes
+Property Address,10629 SE 244th Street Kent WA 98030,
+Purchase Price,889950,
+Property Type,Single Family,
+Square Feet,2625,
+Lot Size (acres),0.92,
+Bedrooms,3,
+Bathrooms,3,
+Year Built,1975,
+Days on Market,33,
+,,
+Renovation Costs,Amount,Category
+Kitchen Renovation,30000,Kitchen
+Bathroom Updates,20000,Bathrooms
+Interior Updates,25000,Interior
+Exterior Maintenance,20000,Exterior
+Systems Updates,25000,Systems
+Contingency (15%),20000,Contingency
+Total Renovation Cost,140000,Total
+,,
+Financial Analysis,Amount,Calculation
+Total Investment,1029950,=B2+B15
+Conservative ARV,1150000,Market Research
+ARV Increase,260050,=B18-B2
+Rehab ROI (%),121,=(B18-B2-B15)/B15*100
+,,
+Financing Details,Amount,Rate/Term
+Interest Rate,8.00%,Annual
+Loan Term (years),30,
+Down Payment %,25.00%,
+Down Payment Amount,222488,=B2*B25
+Loan Amount,667462,=B2-B26
+Monthly PITI,4897,=PMT(B24/12,B25*12,-B27)
+,,
+Rental Analysis,Amount,Source
+Monthly Rent (Conservative),5200,Market Research
+Monthly Rent (Optimistic),5800,Market Research
+Other Monthly Expenses,650,Insurance/Taxes/Maintenance
+Monthly Cash Flow,-347,=B32-B29-B33
+Annual Cash Flow,-4164,=B34*12
+,,
+Key Metrics,Value,Calculation
+Rent/PITI Ratio,1.06,=B32/B29
+DSCR,1.06,=B32/B29
+Cap Rate (%),6.1,=(B32*12)/B18*100
+Annual ROI (%),-0.4,=B35/B17*100
+,,
+Deal Scoring,Score,Weight
+Cash Flow (25%),2,25%
+ROI Potential (20%),6,20%
+Market Conditions (15%),8,15%
+Property Condition (15%),5,15%
+Location Quality (10%),7,10%
+Financing Terms (10%),4,10%
+Exit Strategy (5%),6,5%
+Overall Deal Score,5.2,=SUMPRODUCT(B42:B48,C42:C48)
+,,
+Risk Assessment,Level,Score
+Market Risk,Moderate,6
+Property Risk,Moderate,5
+Financing Risk,Moderate,5
+Cash Flow Risk,High,3
+Overall Risk,Moderate,4.75
+,,
+BRRRR Strategy,Amount,Calculation
+Buy Price,889950,=B2
+Rehab Investment,140000,=B15
+Total Investment,1029950,=B17
+After Repair Value,1150000,=B18
+Equity Created,120050,=B18-B17
+Refinance Potential (75% LTV),862500,=B18*0.75
+Cash-Out Potential,195038,=B67-B17
+New Monthly Payment,6320,=PMT(B24/12,B25*12,-B67)
+,,
+Sensitivity Analysis,Scenario,Monthly Cash Flow
+Conservative Rent ($5,200),Conservative,-347
+Optimistic Rent ($5,800),Optimistic,253
+Conservative ARV ($1,100,000),Conservative,-347
+Optimistic ARV ($1,250,000),Optimistic,253
+Higher Interest Rate (8.5%),Conservative,-347
+Lower Interest Rate (7.5%),Optimistic,253
+,,
+Market Data,Value,Source
+Kent Median Home Value,650000,Zillow
+Kent Price per Sq Ft,340-380,Market Research
+Kent Days on Market,15-25,Market Research
+Kent Appreciation Rate,8-12%,Market Research
+Kent Rental Vacancy Rate,2-3%,Market Research
+,,
+Comparable Sales,Address,Price,Sq Ft,Beds,Baths,Date
+Comp 1,SE Kent Area,875000,2400,3,2.5,2024
+Comp 2,SE Kent Area,820000,2300,3,2,2024
+Comp 3,SE Kent Area,910000,2800,4,3,2024
+Comp 4,SE Kent Area,795000,2200,3,2,2024
+Average Comp Price,850000,=AVERAGE(B85:B88)
+,,
+Rental Comparables,Address,Rent,Beds,Baths,Sq Ft
+Rental 1,Kent Area,4200,3,2,2400
+Rental 2,Kent Area,3800,3,2,2300
+Rental 3,Kent Area,5000,4,3,2800
+Rental 4,Kent Area,3600,3,2,2200
+Average Rent,4150,=AVERAGE(B92:B95) 
