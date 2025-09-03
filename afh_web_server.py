@@ -27,14 +27,17 @@ class AFHHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         """Handle GET requests"""
         if self.path == '/':
-            # Serve the main AFH hub
-            self.path = '/MASTER_AFH_ANALYZER_HUB.html'
+            # Serve the complete homepage
+            self.path = '/AFH_COMPLETE_HOMEPAGE.html'
         elif self.path == '/afh-dashboard':
             # Serve the AFH dashboard
             self.path = '/MASTER_AFH_ANALYZER_HUB.html'
         elif self.path == '/property-search':
             # Serve property search demo
             self.path = '/afh_property_search_demo.html'
+        elif self.path == '/legacy-hub':
+            # Serve the legacy AFH hub
+            self.path = '/MASTER_AFH_ANALYZER_HUB.html'
         elif self.path == '/api/properties':
             # Mock API endpoint for property data
             self.send_property_api_response()
@@ -170,6 +173,7 @@ def start_afh_server(port=3010):
     try:
         with socketserver.TCPServer(("", port), AFHHTTPRequestHandler) as httpd:
             print(f"🚀 Server starting on http://localhost:{port}")
+            print(f"🏠 Complete Homepage: http://localhost:{port}")
             print(f"📊 AFH Dashboard: http://localhost:{port}/afh-dashboard")
             print(f"🔍 Property Search: http://localhost:{port}/property-search")
             print(f"📡 API Endpoints:")
@@ -177,12 +181,16 @@ def start_afh_server(port=3010):
             print(f"   - AFH Scoring: http://localhost:{port}/api/afh-score")
             print()
             print("🎯 Available Features:")
+            print("   ✅ Complete Integrated Homepage")
             print("   ✅ AFH Property Analysis Hub")
             print("   ✅ Property Search & Filtering")
             print("   ✅ AFH Scoring Algorithm")
             print("   ✅ County-Specific Resources")
             print("   ✅ Compliance Checking")
             print("   ✅ Investment Analysis")
+            print("   ✅ Complete Documentation Suite")
+            print("   ✅ Marketing Campaigns")
+            print("   ✅ Implementation Plans")
             print()
             print("📱 Open your browser and navigate to:")
             print(f"   🌐 http://localhost:{port}")
