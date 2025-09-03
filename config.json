@@ -1,0 +1,84 @@
+{
+  "mls_api": {
+    "base_url": "https://api.mlsgrid.com/v2",
+    "api_key": "YOUR_MLS_GRID_API_KEY_HERE",
+    "rate_limit": 1000,
+    "timeout": 30
+  },
+  "email": {
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587,
+    "username": "your_email@gmail.com",
+    "password": "your_app_password_here",
+    "use_tls": true
+  },
+  "email_recipients": [
+    "provider1@example.com",
+    "provider2@example.com",
+    "admin@afhmatcher.com"
+  ],
+  "county_apis": {
+    "king_county": {
+      "base_url": "https://gis.kingcounty.gov/arcgis/rest/services",
+      "parcel_endpoint": "/Property/MapServer/0/query",
+      "permit_endpoint": "/Permits/MapServer/0/query"
+    },
+    "pierce_county": {
+      "base_url": "https://pals.piercecountywa.gov/publicgis/rest/services",
+      "parcel_endpoint": "/Property/MapServer/0/query",
+      "permit_endpoint": "/Permits/MapServer/0/query"
+    },
+    "thurston_county": {
+      "base_url": "https://services.arcgis.com/your_thurston_endpoint",
+      "parcel_endpoint": "/Property/MapServer/0/query",
+      "permit_endpoint": "/Permits/MapServer/0/query"
+    },
+    "lewis_county": {
+      "base_url": "https://parcels.lewiscountywa.gov/api",
+      "parcel_endpoint": "/search",
+      "permit_endpoint": "/permits"
+    }
+  },
+  "search_criteria": {
+    "min_afh_score": 40,
+    "high_potential_score": 60,
+    "max_price": 800000,
+    "min_bedrooms": 2,
+    "min_bathrooms": 1.5,
+    "min_sqft": 1200,
+    "min_lot_size": 0.1,
+    "max_age": 50,
+    "target_counties": ["Lewis", "Thurston", "Pierce", "King"]
+  },
+  "afh_scoring_weights": {
+    "bedrooms": 20,
+    "bathrooms": 15,
+    "square_footage": 15,
+    "lot_size": 10,
+    "single_level": 25,
+    "construction_age": 10,
+    "accessibility_features": 15,
+    "medical_proximity": 5
+  },
+  "compliance": {
+    "mls_license_required": true,
+    "nwmls_compliance": true,
+    "no_scraping_redfin": true,
+    "no_scraping_zillow": true,
+    "respect_rate_limits": true,
+    "data_retention_days": 30
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "afh_search.log",
+    "max_size_mb": 10,
+    "backup_count": 5
+  },
+  "notifications": {
+    "daily_alerts": true,
+    "weekly_summary": true,
+    "high_potential_immediate": true,
+    "email_format": "html",
+    "include_county_links": true
+  }
+}

@@ -1,0 +1,47 @@
+# AFH Property Search System Requirements
+# Python 3.8+ required
+
+# Core dependencies
+requests>=2.31.0
+schedule>=1.2.0
+python-dateutil>=2.8.2
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Email functionality
+secure-smtplib>=0.1.1
+
+# Configuration management
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# Logging and monitoring
+structlog>=23.1.0
+
+# Database (optional - for persistent storage)
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0  # PostgreSQL
+# sqlite3 is included with Python standard library
+
+# Web scraping (for county permit systems only - no consumer sites)
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# API clients
+httpx>=0.24.0  # Modern async HTTP client
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.11.0
+
+# Development tools
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+
+# Documentation
+sphinx>=7.0.0
+sphinx-rtd-theme>=1.3.0

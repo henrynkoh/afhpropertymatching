@@ -1,62 +1,63 @@
-# Exclude everything by default
-*
-
-# Include only BRRRR Analyzer Hub files
-!MASTER_BRRRR_ANALYZER_HUB.html
-!BRRRR_RESULTS_DASHBOARD.html
-!brrrr_deal_analysis_all_versions.html
-!rental_income_analysis_all_versions.html
-!market_analysis_all_versions.html
-!brrrr-calculator.js
-!brrrr-storage.js
-!BRRRR_ANALYZER_HUB_COMPLETE_PROMPT.md
-!ADU_BRRRR_ANALYSIS_GUIDE.md
-!README.md
-
-# Exclude specific directories
-wordsoftruth/
-real_estate_series/
-config/
-*.mp4
-*.m4a
-*.aiff
-*.html
-!MASTER_BRRRR_ANALYZER_HUB.html
-!BRRRR_RESULTS_DASHBOARD.html
-!brrrr_deal_analysis_all_versions.html
-!rental_income_analysis_all_versions.html
-!market_analysis_all_versions.html
-
-# Exclude Python and Ruby files
-*.py
-*.rb
-*.sh
-
-# Exclude documentation files
-*.md
-!BRRRR_ANALYZER_HUB_COMPLETE_PROMPT.md
-!ADU_BRRRR_ANALYSIS_GUIDE.md
-!README.md
-!BRRRR_ANALYZER_HUB_README.md
-!BRRRR_ANALYZER_HUB_MANUAL.md
-!BRRRR_ANALYZER_HUB_TUTORIAL.md
-!BRRRR_ANALYZER_HUB_QUICKSTART.md
-!facebook_ads.md
-!instagram_ads.md
-!threads_ads.md
-!blogger_ads.md
-!naver_blog_ads.md
-!tistory_ads.md
-
-# Exclude directories
-*/
-!BRRRR-Analyzer-Hub/
+# AFH Property Matching Service - .gitignore
 
 # Exclude system files
 .DS_Store
 Thumbs.db
-
-# Exclude temporary files
 *.tmp
 *.temp
-*.log 
+
+# Exclude Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Exclude virtual environments
+venv/
+env/
+ENV/
+afh_env/
+
+# Exclude IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Exclude log files (but keep afh_search.log for debugging)
+*.log
+!afh_search.log
+
+# Exclude sensitive files
+.env
+*.key
+*.pem
+
+# Exclude temporary directories
+temp/
+tmp/
+
+# Include all AFH project files
+!AFH_*.md
+!afh_property_search_system.py
+!config.json
+!requirements.txt
+!setup_instructions.md
+!nwmls_broker_setup.md
+!README.md
